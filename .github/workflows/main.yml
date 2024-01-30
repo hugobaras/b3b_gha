@@ -1,0 +1,59 @@
+name: Build and Execute Python Script
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Installation des dépendances
+        run: |
+          sudo apt-get install python3
+          pip install -r requirements.txt
+
+      - name: Exécution du script Python
+        run: python3 script.py
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+          cache: 'pip'
+
+      - name: Installation des dépendances
+        run: pip install -r requirements.txt 
+
+
+      - name: Coverage
+        run: pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
+
+
+      - name: Pytest coverage comment
+      
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: pytest-coverage.txt
+          junitxml-path: pytest.xml
+          github-token: ${{secrets.EPSI_TOKEN}}
