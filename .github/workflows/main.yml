@@ -78,7 +78,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The CI of {{ EVENT_PAYLOAD.repository.full_name }} is green! :white_check_mark:'
+          args: 'Kachowwww {{ EVENT_PAYLOAD.repository.full_name }} is green! :white_check_mark:'
       
       - name: Discord failed notification
         if: ${{ needs.coverage.result != 'success' }}
@@ -86,6 +86,5 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The CI of {{ EVENT_PAYLOAD.repository.full_name }} is red! :x:'
+          args: 'Vrooooum {{ EVENT_PAYLOAD.repository.full_name }} is red! :x:'
 
-          
